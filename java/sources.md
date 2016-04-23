@@ -147,7 +147,7 @@ Members in class must be arranged in the following order:
 3. Static initializer (static {...}) - avoid these too 
 4. Instance fields
 5. Constructors and static constructor-like methods that return instance of this class 
-6. Other methods
+6. Other members (methods, inner classes, ...)
 
 Within each section some logical order must be present. There is no single correct recipe, however maintainer should be
 able to document it if asked. "Chronological by date added" is not a logical ordering, and especially a bad one.
