@@ -430,12 +430,6 @@ it is impossible to use VCS blame command to quickly identify whether comment an
 time or code was updated later. 
 
 
-##### Prefer Javadoc over other types of comments
-
-If you don't have a method to write javadoc, but still need to write a comment, consider creating such place by 
-extracting the code fragment you are commenting to form a method.
-
-
 ##### Comments that occupy the entire line are always indented at the same level as the surrounding code and  
 
     void init() {
