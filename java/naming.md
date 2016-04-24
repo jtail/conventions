@@ -163,6 +163,13 @@ Motto: Incremental, logically simple refactoring operation such as extracting su
 a huge blast radius of changing dozens of files. Also, this rule forces the developer to think on the proper name of 
 the class at the right time - when it is created and before it is already used in many places that are hard to change. 
 
+#### Test classes are named starting with the name of the class they are testing, and ending with Test
+
+Thus, ending the class name with `Test` explicitly marks it as such. Avoid using `Test` in any place of classes in 
+production codebase to prevent confusion. For example: `HashTest` or `HashIntegrationTest`.
+
+Motto: Have a quick and defined way to find tests for a specific class.
+ 
 
 ### Instance fields 
 
