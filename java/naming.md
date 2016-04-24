@@ -326,10 +326,10 @@ Examples:
 **by** - Lookup object(s) with a property somehow matching given argument.   
 
     public interface UserService { 
-        User byId(String id) {...}
-        List<User> byNickname(String nickname)
-        Stream<User> byRegistrationDateBefore(Date value)
-        Stream<User> byNameAndSurname(String name, String surname)
+        User byId(String id);
+        List<User> byNickname(String nickname);
+        Stream<User> byRegistrationDateBefore(Date value);
+        Stream<User> byNameAndSurname(String name, String surname);
     }
 Note that return type is on context so it should not be duplicated in method name.
 
@@ -342,5 +342,28 @@ one is used when search criterion in cases when no property exists.
         Batch<User> findUpdatedBetween(Date from, Date to);
     }
 
+**to** - Convert to a different form.    
+    
+    public interface TokenService {
+        String toJson(Token token);
+        byte[] toByteArray(Token token);  
+    }
+    
+**from** - Obtain an object (with the target class known from context) from a different form. Note that if information 
+about the type of source object is already on context, you are good to go with this single word:
+    
+    public class Instant {
+        public static Instant from(TemporalAccessor temporal) {...}
+    }
 
+However if source object type is not enough to understand what is happening, additional information must be communicated 
+in the method name:    
+    
+    public interface TokenService {
+        // "String" parameter type on context does not communicate that it is json and fields are base64 encoded 
+        Token fromJsonBase64(String json);
+    }
 
+Note: another common prefix for this kind of conversion is `parse`. Hovewer using it as a generic prefix might turn
+misleading, as not every conversion involves parsing. It is not recommended to use it, unless you explicitly want to
+communicate that parsing is involved.
