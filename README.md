@@ -58,8 +58,9 @@ All above mentioned aspects are equally important.
 
 [Class Structure](java/class-structure.md)
 
-[Variables (including fields, method and lambda parameters)](java/variables.md)
+[General Programming Practices](java/general.md)
 
+[Variables (including fields, method and lambda parameters)](java/variables.md)
 
 [Formatting](java/formatting.md)
 
