@@ -56,13 +56,14 @@ keep a limited number of them in "hot" memory. However package names are seen of
 limitation quite a bit.  
  
 
-#####  Abbreviations must be explained in the javadoc comment
+##### Abbreviations must be explained in the javadoc comment
 
 Especially if you are using one that is not well-known or explanation is not easily found.
-For packages this javadoc should be placed in package.java. 
+The javadoc comment must appear at the level where abbreviation is introduced.
+For packages this it should be placed in package.java. 
 
 
-##### Use abbreviations consistently and document them on top level
+##### Use abbreviations consistently
 
 Avoid using expanded form of abbreviation in naming of program elements.
 
@@ -170,8 +171,35 @@ often a good idea to duplicate some info from the package name.
        
     com.example.payments.PaymentSchedule
     
-#### Class names are built with generic to specific right to left     
+#### Class names
+     
+Class names are typically nouns or noun phrases. For example, `Character` or `ImmutableList`. Interface names may also be 
+nouns or noun phrases (for example, List), but may sometimes be adjectives or adjective phrases instead (for example, 
+Readable).
+
+When building class hierarchy, if words that describe subclass specifics are added to superclass name, they must be 
+added at the beginning:
+ 
+    // PREFER
+    public class LinkedHashMap extends HashMap  
+    // AVOID
+    public class StudentHomeProjectValidator extends StudentProjectValidator
     
+This might occassionaly result in excessively long class names. When this happens, consider dropping words in the middle
+of the name that carry least information. For example, in most cases `HomeStudentProjectValidator` can be shortened to
+`HomeProjectValidator`, assuming your system does not hame to track teacher home projects already.    
+A total of 4 words should ring a bell and 5 are a clear sign that you are doing something wrong.
+
+Also, avoid copying superclass name when subclass name describes instance of superclass by definition.  
+    
+    // PREFER 
+    class Falcon extends Bird
+    // AVOID - falcon is a bird already, so this is duplication  
+    class FalconBird extends Bird
+    
+Note: This convention enforces no specific rules for naming annotation types. 
+    
+
 #### Avoid giving prefixes and suffixes to classes that describe meaningful abstractions 
 
 This rule applies to all interfaces as they describe abstractions by design.
