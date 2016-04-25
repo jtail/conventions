@@ -105,10 +105,9 @@ getting add/add conflicts and also aids in resolving them quickly.
 A sample of ordering rules:
 
     Import statements are divided into the following groups, in this order:    
+    - JDK imports
+    - All other non-static imports
     - All static imports in a single group
-    - javax imports
-    - java imports
-    - All other imports
     Groups are separated by a single blank line:
     Within a group there are no blank lines, and the imported names appear in ASCII sort order.
  
