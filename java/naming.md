@@ -149,7 +149,7 @@ Beginning with the prose form of the name:
 Note that the casing of the original words is almost entirely disregarded. Examples:
 
 | Prose form                | Prefer            | Avoid             |
----------------------------------------------------------------------
+| ------------------------- | ----------------- | ----------------- |
 | "XML HTTP request"        | XmlHttpRequest    | XMLHTTPRequest    |
 | "new customer ID"         | newCustomerId     | newCustomerID     |
 | "inner stopwatch"         | innerStopwatch    | innerStopWatch    |
