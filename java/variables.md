@@ -3,7 +3,7 @@
 This section covers all variable-like language constructs: 
 fields, method parameters, local variables and lambda expression parameters.
 
-##### One variable per line declaration 
+#### One variable per line declaration 
 
 Every variable declaration (field or local) declares only one variable.
 
