@@ -331,7 +331,17 @@ Examples:
         Stream<User> byRegistrationDateBefore(Date value);
         Stream<User> byNameAndSurname(String name, String surname);
     }
+
 Note that return type is on context so it should not be duplicated in method name.
+
+**is** - Simple boolean getter or predicate method.     
+
+    public class User {
+        boolean isSmart();
+    }
+    public interface UserService {
+        boolean isLoginPermitted(User u);
+    }
 
 **find** - Lookup method, retrieving one or more items that match a specific condition. Compared to 'by' prefix, this 
 one is used when search criterion in cases when no property exists. 
