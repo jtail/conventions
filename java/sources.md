@@ -78,6 +78,13 @@ In branch Y, someone has added the following code to the superclass A:
 
 Once you merge it, the code even compiles, however do you know which method is called now from class B?
 
+Note: This rule does not apply to test code. Many test libraries, including JUnit feature helper methods that are named 
+in a way that encourages importing them in a static way:
+ 
+    assertEquals("foo", result); 
+
+However note that **creating** such methods is explicitly forbidden by *"Names are contextual"* section of this policy.
+ 
 
 #### Avoid wildcard imports
 
