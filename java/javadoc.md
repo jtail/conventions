@@ -20,7 +20,7 @@ the entirety of the Javadoc block (including comment markers) can fit on a singl
 
 ##### Paragraphs 
 
-One blank line—that is, a line containing only the aligned leading asterisk (*)—appears between paragraphs, and before 
+One blank line — that is, a line containing only the aligned leading asterisk (*)—appears between paragraphs, and before 
 the group of "at-clauses" if present. Each paragraph but the first has <p> immediately before the first word, with no 
 space after.
 
@@ -35,9 +35,9 @@ these four types never appear with an empty description.
 
 The Javadoc for each class and member begins with a brief summary fragment. 
 
-This is a fragment—a noun phrase or verb phrase, not a complete sentence. It does not begin with A {@code Foo} is a..., 
-or This method returns..., nor does it form a complete imperative sentence like Save the record.. However, the fragment 
-is capitalized and punctuated as if it were a complete sentence.
+This is a fragment — a noun phrase or verb phrase, not a complete sentence. It does not begin with 
+"A {@code Foo} is a...", or "This method returns...", nor does it form a complete imperative sentence like 
+"Save the record.." However, the fragment is capitalized and punctuated as if it were a complete sentence.
 
 Tip: A common mistake is to write simple Javadoc in the form `/** @return the customer ID */`. 
 This is incorrect, and should be changed to `/** Returns the customer ID. */`.
@@ -59,13 +59,21 @@ few exceptions noted below. Other classes and members have Javadoc as needed.
 
 #### Avoid trivial Javadoc 
 
-Javadoc is optional for "simple, obvious" methods like `getFoo`, in cases where there really and truly is nothing else 
-worthwhile to say but "Returns the foo". Quite often there is nothing to say in the javadoc of `UserService` either.
+Avoid writing Javadoc that tells the reader things he is already well-aware from the context. Typical examples for this
+are:
+1. Simple, obvious methods like `getFoo`, in cases where there really and truly is nothing else worthwhile to say but 
+"Returns the foo". 
+2. Classes that have a generic function and self-explainatory names, such as `UserService`.
+
+Motto: Maintainability - if you later rename class Foo into Bar, updating javadoc on all getters might prove quite a 
+burden. 
 
 Important: it is not appropriate to cite this exception to justify omitting relevant information that a typical reader 
 might need to know. For example, for a method named getCanonicalName, don't omit its documentation (with the rationale 
 that it would say only /** Returns the canonical name. */) if a typical reader may have no idea what the term 
-"canonical name" means!
+"canonical name" means! However note that if you already have a place where meaning of "canonical name" is 
+well-documented, it might be a good idea to insert only a single-sentence summary and a reference to that place, for the
+sake of maintainability.
 
 #### Avoid duplicating sizable Javadoc fragments, especially between different classes 
  
