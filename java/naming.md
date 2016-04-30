@@ -28,8 +28,14 @@ multiple classes that use it and might become a nightmare if it is already part 
 
 #### Descriptive
 
-Name of the program element should describe **what** it is (or **what does it do** for methods). 
-
+Identifier should describe **what it is** (or **what does it do** for methods). Especially, it should not mislead 
+reader into an assumption that is not guaranteed to be true. If such situation appears as a result of refactoring, it 
+must be either fixed as part of the same refactoring commit or deprecated, providing properly named alternative.
+    
+    // AVOID
+    Set<Bar> listBars(Criteria<Bar> filter);
+    Cat dog = new Cat();
+    
 
 #### Concise
 
@@ -292,7 +298,7 @@ Note: In tests underscore can occassionally be useful to clearly separate name o
 for example: `createUser_InvalidName`. And this is one extra reason why you should not use it in production code.
 
 
-#### Method name should start with verb in present simple
+#### Prefer method names starting with verb in present simple
 
 The verb is followed by one or more words that give further details on the action being performed by the method. 
 Ensure that from the name it is clear whether method will have side-effects or not.            
@@ -302,17 +308,19 @@ Ensure that from the name it is clear whether method will have side-effects or n
         void updateName(String id, String name);
     }
 
-Exception: Helper method that builds an instance based on arguments can be named same as class it builds with the first 
-letter lowercased:
+Exceptions: 
+
+1. Methods that return Stream, similar to `java.nio.file.Files.lines()`. 
+
+2. Helper method that builds an instance based on arguments can be named with a noun, or same as class it builds with the 
+first letter lowercased. This practice is often utilized in test code.
  
-    static Address address(String line1, String line2, String city, String country) {
-        Address a = new Address();
-        a.setLine1(line1);
-        a.setLine2(line2);
-        a.setCity(city);
-        a.setCountry(country);
-        return a;
-    }
+        static Address address(String line1, String line2, String city, String country) {
+            Address a = new Address();
+            // populate fields from arguments ...
+            return a;
+        }
+
 
 #### For methods, context is class name and parameter types. 
 
