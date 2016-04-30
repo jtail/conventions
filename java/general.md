@@ -1,5 +1,26 @@
 ### General programming Practices 
 
+#### @Deprecated elements must be documented to direct reader to current api
+
+Deprecated program elements must be documemented using `@deprecated` javadoc tag that explains what should be used 
+instead and why the element is deprecated. Example:
+
+    /** 
+     * @deprecated use {@link #getRoles()} instead. For users with multiple roles, this method will return the 
+     * 'most important' role, however new roles added in the future are not guaranteed to be comparable by importance.
+     */
+    @Deprecated
+    Role getRole(); 
+
+Motto: If you don't do it, good developers will lose some time while trying to find the alternative you meant to be 
+used, while bad delevopers might choose to use the deprecated version. Either option is bad.
+
+If it is not possible to use a direct reader to a direct alternative, a really detailed explanation must be written.
+See how `java.lang.Thread.stop()` method is documented for a good example.
+
+Note: It is recommended, but not required to use `@Deprecated` annotation in addition to javadoc tag.          
+          
+
 #### @Override must be used on non-deprecated methods
 
 A method is marked with the @Override annotation whenever it is legal. This includes a class method overriding a 
