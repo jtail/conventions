@@ -289,45 +289,56 @@ Fields that have a function should reflect it in the name.
 
 ### Methods
 
-#### Method names use camelCase and contain only alphanumeric characters.
+*Terminology note*
 
-First word in lowercase, internal words capitalized. Avoid using underscore (_) and other non-alphanumeric characters in 
-production code. 
+**Imperative** method has observable side-effects (such as mutation of mutable objects or output to devices).
+Examples: PrintStream.println(), List.add(), StringBuilder.append(). 
+
+**Pure** method has no observable side-effects and always produces the same return value given the same argument 
+values (for instance methods? object on which method is called, counts as one of arguments). The result value cannot 
+depend on any hidden information or state that may change while program execution proceeds or between different 
+executions of the program, nor can it depend on any external input from I/O devices. 
+Examples: Math.max(), String.length().
+
+There are methods, belong to neither of these categories. For example, a simple getter that returns a mutable field or 
+a method that finds user in DB by name.  
+
+#### Method names use lower camelCase and contain only alphanumeric characters.
+
+Also, avoid using underscore (_) and other non-alphanumeric characters in production code. 
 
 Note: In tests underscore can occassionally be useful to clearly separate name of method under test and test case name, 
 for example: `createUser_InvalidName`. And this is one extra reason why you should not use it in production code.
 
 
-#### Prefer method names starting with verb in present simple
+#### Prefer names starting with verb in present simple for imperative methods 
 
-The verb is followed by one or more words that give further details on the action being performed by the method. 
-Ensure that from the name it is clear whether method will have side-effects or not.            
+The verb can be followed by one or more words that give further details on the action being performed by the method. 
+Ensure that from the name it is clear waht exactly are side-effects of executing the method.            
 
     public interface UserService {
         User create(String name, String password);
         void updateName(String id, String name);
     }
 
-Exceptions: 
-
-1. Methods that return Stream, similar to `java.nio.file.Files.lines()`. 
-
-2. Helper method that builds an instance based on arguments can be named with a noun, or same as class it builds with the 
-first letter lowercased. This practice is often utilized in test code.
+Motto: Explicitly communicate to the reader that method has side-effects and what exactly they are.
  
-        static Address address(String line1, String line2, String city, String country) {
-            Address a = new Address();
-            // populate fields from arguments ...
-            return a;
-        }
+There are no explicit limitations on naming non-imperative methods. They can start from the verb, a noun or even a 
+preposition. All of the following examples are legal: 
+
+    class EmailService { List<Email> findUnconfirmed() ... }
+    class User { Role getRole() ... }
+    class Files { Stream<String> lines() ... } 
+    class AddressServiceTest { Address address(String line1, String line2, String city, String country) ... } 
+     
 
 
 #### For methods, context is class name and parameter types. 
 
 Therefore they generally should not be duplicated in the method name.
 Keep in mind that does not apply to parameter names, that are not part of the method signature.
-Information available from method return value type usually should not be duplicated in method name, except for cases when 
-multiple methods would end up with a signature conflict otherwise.
+Information available from method return value type usually should not be duplicated in method name, except for cases 
+when multiple methods would end up with a signature conflict otherwise.
 
 Motto: Even with the compiled code, parameter types are available to the developer.
 
@@ -373,7 +384,7 @@ Note that return type is on context so it should not be duplicated in method nam
 **is** - Simple boolean getter or predicate method.     
 
     public class User {
-        boolean isSmart();
+        boolean isSmart() {...}
     }
     public interface UserService {
         boolean isLoginPermitted(User u);
@@ -413,3 +424,16 @@ in the method name:
 Note: another common prefix for this kind of conversion is `parse`. Hovewer using it as a generic prefix might turn
 misleading, as not every conversion involves parsing. It is not recommended to use it, unless you explicitly want to
 communicate that parsing is involved.
+
+#### Examples of noun-bases method names 
+
+**noun in plural** - Method that returns Stream. Example: `java.nio.file.Files.lines()`. 
+
+**noun in singular** Helper method that builds an instance based on arguments can be named with a noun, or same as class 
+it builds with the first letter lowercased. This practice is often utilized in test code. Example:
+ 
+    static Address address(String line1, String line2, String city, String country) {
+        Address a = new Address();
+        // populate fields from arguments ...
+        return a;
+    }
