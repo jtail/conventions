@@ -284,7 +284,60 @@ Fields that have a function should reflect it in the name.
 
 ### Variables
 
-<!-- TODO -->
+*Terminology note:* The word 'variables' is used in the broad sense here, including parameters of methods and lambda 
+expressions (but not fields).  
+
+#### Prefer short, minimally descriptive variable and parameter names
+
+Variables are highly contextual. Class name, method name and variable type are all on context so there are a lot of 
+cases when you will have very little to say in the variable name. They are also very local, so even if you later change 
+the method causing the variable name to become ambiguous, refactoring is safe and easy. 
+ 
+    // AVOID
+    public class UserService {
+        Stream<User> findAllBlocked() {
+            Stream<User> eternallyBlockedUsers = findBlockedEternally();
+            Stream<User> temporarilyBlockedNotOverriddenUsers = findBlockedTemporarily().filter(u -> !hasAccessOverride(u));
+            return Stream.concat(eternallyBlockedUsers, temporarilyBlockedNotOverriddenUsers).distinct();
+        }
+    }     
+
+    // PREFER  
+    public class UserService {
+        Stream<User> findAllBlocked() {
+            Stream<User> eternally = findBlockedEternally();
+            Stream<User> temporarily = findBlockedTemporarily().filter(u -> !hasAccessOverride(u));
+            return Stream.concat(eternally, temporarily).distinct();
+        }
+    }     
+    
+Motto: 
+Reading the exact same words that are already on context multiple times does not help to understand the code better.
+In fact, they often make it worse, as the important words that make the difference become hidden in the forest of those 
+repeated words so the reader has to spend more time finding them.
+
+Note:
+In many cases, everything that needs to be said about the variable is already known on context. In this case, choose one 
+word to duplicate from context which is most specific. Note that this choice depends on other variables on context as
+well:
+    
+    void remoteLogin(LocalUser local, RemoteUser remote)
+    void updateProfile(LocalUser user, LocalProfile profile)
+
+If you absolutely have nothing more to say about the method argument or variable, than is already known from context, 
+giving it a meaningful name might be problematic. In such case, it is just fine to give it a short, even single-letter 
+name. At least, it will not to become misleading later. A common example of such situation is arithmetic methods, where 
+arguments are just arguments.  
+
+    // Acceptable
+    public static double max(double a, double b)
+
+However do not be easily caught into the trap of missing the important information, using this exception as an excuse.
+  
+    // AVOID
+    public static double pow(double a, double b)
+    // PREFER
+    public static double pow(double base, double exponent)
 
 
 ### Methods
