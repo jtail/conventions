@@ -243,8 +243,9 @@ A single blank line appears:
 
 1. Between consecutive members (or initializers) of a class: 
     fields, constructors, methods, nested classes, static initializers, instance initializers.
-Exception: A blank line between two consecutive fields (having no other code between them) is optional. 
 Such blank lines are used as needed to create logical groupings of fields.
+Exception: A blank line between two trivial field declarations is optional. Field declaration is trivial if has no 
+annotations and comments and occupies only one line.
 
 2. Within method bodies, as needed to create logical groupings of statements.
 
@@ -453,7 +454,7 @@ affecting the output of `git blame` on such lines. However if fragment being com
 contains a multiline comment it will not work properly.
 
 NOTE: In some extremely rare cases, it might be reasonable to use multiline style to write truly long essays that are 
-still subject to be maintained but somehow you do not want them to be exposed in javadoc. In this case you usually 
+still subject to be maintained, but somehow you do not want them to be exposed in javadoc. In this case you usually 
 already know you are doing something wrong but cannot immediately address it for some reason. Neverthless, if you got 
 into this situation, think twice. Code is really not a good place to write essays. Maybe you should, for example, place 
 a ticket in bugtracker and put small comment with a link and short summary instead.  
