@@ -89,6 +89,11 @@ unnecessary here.
     } catch (NoSuchElementException expected) {
     }
 
+Note that if you are testing for a single exception and don't need to run assertions on the exception itself, it is 
+often more appropriate to use annotation-level declaration: `@Test(expected = NoSuchElementException.class)` 
+which is both more concise and readable. However the situations when you want to test for multiple exceptions as part 
+of the same scenario exist as well as you might want to ensure that given exception does not happen earlier in test. 
+
 
 #### Static members are qualified with the name of that class  
 
@@ -104,3 +109,25 @@ with that class's name, not with a reference or expression of that class's type.
 
 Motto: When reading code outside of IDE, it is difficult to distinguish static and instance members, however this
 information is often very important, especially when hunting for synchronization issues.
+
+
+#### Prefer positive checks
+
+When using if-else or other code branching constructs with 2 or more alternative branches, prefer logically positive 
+condition checks. Note that constructs such as `!= null` and `!list.isEmpty()` qualify as 'logically positive' in most 
+cases. 
+  
+    // PREFER
+    if (zombie.hasBrains()) {
+        // Do something
+    } else {
+        // Do something else
+    }
+    // AVOID
+    if (!zombie.hasBrains()) {
+        // Do something else
+    } else {
+        // Do something
+    }
+    
+Motto: Humans have difficulty handling multiple negations when reading.
