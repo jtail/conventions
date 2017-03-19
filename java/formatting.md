@@ -28,15 +28,12 @@ All forms of brackets (round `()`, square `[]` and braces`{}`) obey the followin
 
 ##### 1. No line break before the opening bracket
 
-Exceptions: arithmetic brackets in expressions and grouping brackets in multi-dimensional array initializers:
+Exceptions: arithmetic brackets in expressions and grouping brackets in multi-dimensional array initializers.
 
-##### 2. Line break must be placed after the opening brace and can be placed after round and square brackets at will
+##### 2. Line break *must* be placed after the opening brace and *can* be placed after round and square brackets at will
 
 Exceptions: 
-Anonymous class containing only initializer block.
-    
-    Tree tree = new Tree() {
-    };
+Double braces are allowed in anonymous classes containing only initializer block and array initializers. 
     
 ##### 3. If line break is present after the opening bracket it is placed before the closing bracket as well (and vice versa)  
 
@@ -146,9 +143,7 @@ Very often there are several valid ways to line-wrap the same piece of code.
 
 The recommended approach:
 
-Tip: Extracting a method or local variable may solve the problem without the need to line-wrap.
-
-1. If it is possible to extract variable with a meaningfil name, this is the way to go. 
+1. If it is possible to extract variable or method with a meaningfil name, this is the way to go. 
 
         // AVOID        
         return new GraphNode(Long.parseLong(values.get(0).trim()), values.get(1).trim(),
@@ -199,11 +194,13 @@ after opening bracket and before the closing one.
 Motto: When reading the code developer usually needs to go from generic to specific. Ability to quickly skip "more 
 specific" blocks of code heavily depends on identation as they eye tends to "scroll down" to the next line at the same
 level of identation. If brackets are around method call, there is another good reason is to place method name 
-(which is usually quite long in such case) and parameters on different lines. Longer names tend to be changed more 
-frequently and such approach makes it easier to see that parameter values didn't change during refactoring.
+(which is usually quite long in such case) and parameters on different lines: longer names, being more specific, 
+tend to be changed more frequently and such approach makes it easier to see that parameter values didn't change during 
+refactoring.
 
 
 #####  When a line is broken at a non-assignment operator the break comes before the symbol
+
 This also applies to the following "operator-like" symbols:
  
 - the dot separator (.) 
@@ -255,7 +252,8 @@ Multiple consecutive blank lines are permitted, but never required (or encourage
 
 ##### Horizontal whitespace 
 
-Beyond where required by the language or other style rules, and apart from literals, comments and Javadoc, a single ASCII space also appears in the following places only.
+Beyond where required by the language or other style rules, and apart from literals, comments and Javadoc, a single 
+ASCII space also appears in the following places only.
 
 1. Separating any reserved word, such as if, for or catch, from an open parenthesis (() that follows it on that line
 2. Separating any reserved word, such as else or catch, from a closing curly brace (}) that precedes it on that line
@@ -270,7 +268,7 @@ Beyond where required by the language or other style rules, and apart from liter
 6. On both sides of the double slash (//) that begins an end-of-line comment. Here, multiple spaces are allowed.
 7. Between the type and variable of a declaration: List<String> list
 
-Note: This rule never requires or forbids additional space at the start of a line. , only interior space.
+Note: This rule never requires or forbids additional space at the start of a line. Only interior space is affected.
 
 
 ##### Avoid using horizontal alignment 
@@ -310,14 +308,17 @@ Motto: Changes to public API should be easy to review, so adding or removing enu
 Also, even if you do not have a Javadoc at the moment, it should be easy to add it and review such change.
 
 NOTE: Private enums are regulated less strictly and can even be formatted as if it were an array 
-initializer, if the have no methods, no documentation and no constructor arguments. 
+initializer, if they have no methods, no documentation and no constructor arguments. 
     
     private enum Suit {CLUBS, HEARTS, SPADES, DIAMONDS}
 
 
 #### Avoid C-style array declarations 
 
-The square brackets form a part of the type, not the variable: String[] args, not String args[].
+The square brackets form a part of the type, not the variable: `String[] args`, not `String args[]`.
+
+Motto: Uniform look of code written by different developers. 
+
 
 #### Array initializers 
 
