@@ -131,3 +131,14 @@ cases.
     }
     
 Motto: Humans have difficulty handling multiple negations when reading.
+
+
+#### Avoid catching generic exception classes without rethrowing
+
+Avoid catching Throwable, Exception and RuntimeException, and especially having business-level logic dependent on 
+such catch clauses.
+Motto: Many runtime exceptions, such as IllegalArgumentException or IllegalStateException are 'unexpected by 
+definition', meaning they can happen pretty much anywhere, anytime. 
+Putting business or execution flow control logic in generic catches might result in triggering it under circumstances 
+not anticipated by the author.  
+
