@@ -19,7 +19,7 @@ In general, maintainability is property of code that allows to reduce risks when
 In specifics it mostly boils down to a few principles:
 
 1. Ability to change the code consistently. For example most forms of duplication are bad for maintainability, because 
- when changing the code deveper might not update both parts of duplication consistently, causing unpredictable 
+ when changing the code developer might not update both parts of duplication consistently, causing unpredictable 
  behaviour. 
 
 2. Ability to see the impact of the change. It mostly affects the way how the code is structured. 
@@ -33,7 +33,12 @@ In specifics it mostly boils down to a few principles:
 4. Resistance to human errors. What happens if when adding new functionality or making a required change in an existing 
  feature developer changes something that he shouldn't have touched? If your tests break or the program will not start,
  you are probably good. If you will get some obscure runtime exception - likely no. This aspect generally relates to 
- input validations, error handling and having adequate tests.  
+ input validations, error handling and having adequate tests.
+   
+5. Build reproduction. Build must produce same results when executed on different environments and/or on different time.
+
+6. Test robustness. Changing the code in a way that does not break production behaviour should not result in test 
+ failures. 
   
  
 ### Readability
