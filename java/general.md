@@ -142,3 +142,37 @@ definition', meaning they can happen pretty much anywhere, anytime.
 Putting business or execution flow control logic in generic catches might result in triggering it under circumstances 
 not anticipated by the author.  
 
+
+#### Use interfaces only when required
+
+Avoid creating interface, when there is no objective reason to split the implementation.
+Typical valid reasons:
+1. Multiple implementations exist immediately, at least in test code. 
+2. Different scope is required for interface and implementation (api is published separately, implementation is 
+available only at runtime)  
+
+Motto: Maintainability - interface is just another class to change and to review. With modern IDEs, splitting a class 
+to interface and implementation is trivial operation that requires to update only code where it was instantiated 
+directly and in a well-designed application such places would be only a few, and you will only have to do it once.
+On the other hand, every time you update the class API, including any additive changes, you will have to do double 
+changes, updating both the class and interface. While this action is quite cheap and straightforward in implementation,
+it still complicates code reviews due to increased number of files.  
+
+Note: This rule should be explicitly treated as 'hard and fast'. If you create a class that you expect to have 
+alternative implementations, but none of them are present at the time of pull request creation, interface still should 
+not be created. By the time somebody actually writes and tests it, it is quite likely to discover a different API was
+required to create a functional alternative.
+
+Historical Note: Creating interfaces for everything was in fact useful back in 2005, when Spring was configured in XMLs 
+not all IDE's even had 'extract interface' automated refactoring. 
+If you were practicing TDD at that time, it was safe to assume that at some point the need to manually create mock 
+implementation for almost every class. So it was pretty practical to create at least an interface to ensure that 
+someone who would want to merely mock your class in his test will not have to refactor all code that uses it 
+(including Spring configs). However the Java world has changed in a number of ways. 
+1. Reflection-based test support frameworks that eliminate the need for manual mocks, such as Mockito and later 
+Spock have established themselves. 
+2. We got powerful IDE's that allow to do standard refactorings automatically.
+3. CDI frameworks, got annotation-based configurations, that are way easier to maintain.   
+4. Last, but not the least, git has arrived and allows us to isolate such changes in a separate commit.
+The combination of these factors made extracting interface as simple and reliable action, that takes less than a minute
+in most cases. Compare this to extra time reviewer spends reading changes to extra interface class on review.
