@@ -132,11 +132,34 @@ cases.
     
 Motto: Humans have difficulty handling multiple negations when reading.
 
+#### Use checked exceptions for recoverable errors and runtime exceptions for unrecoverable errors 
+
+Use checked expections represent invalid conditions in areas outside the immediate control of the program, such as 
+invalid user input, network outage or missing file. Such errors *usually* can be handled by caller in a meaningful way.
+A good example is IOException: a caller can retry later or access a different resource, reacting to it.
+
+Use runtime exceptions to represent conditions that reflect errors in your program's logic and cannot be reasonably 
+recovered from at runtime. For example, most of the time caller has no meaningful way to react to 
+IndexOutOfBoundsException - the programmer failed to calculate the index he is accessing properly or at least check the
+incoming value in case caller has no knowledge about the array.
+
+Motto:
+Since checked exceptions trigger a compilation error if they are not caught or declared, ensures that programmer using 
+the API is aware about possible alternative outcomes and motivates to handle them as early as possible.
+Runtime exceptions are typically caught by top-level classes, such as controller or executor with a sole purpose of
+logging them.
+ 
+Warning: JDK should not be used as a source of inspiration when deciding on exception type. It is full of both good and
+bad examples in this regard, partly because developers had to make some compromises, partly because of historic design
+choices that can't be changed without breaking backward compatibility.
+
 
 #### Avoid catching generic exception classes without rethrowing
 
-Avoid catching Throwable, Exception and RuntimeException, and especially having business-level logic dependent on 
-such catch clauses.
+Catching and not rethrowing Throwable, Exception and RuntimeException is usually appropriate only when you have nowhere 
+to rethrow (e.g. in classes that reside on top of the call stack, such as controller or Runnable executed in a separate 
+thread. And it is almost never appropriate to have business-level logic dependent on such generic catch clauses. 
+
 Motto: Many runtime exceptions, such as IllegalArgumentException or IllegalStateException are 'unexpected by 
 definition', meaning they can happen pretty much anywhere, anytime. 
 Putting business or execution flow control logic in generic catches might result in triggering it under circumstances 
@@ -160,7 +183,7 @@ it still complicates code reviews due to increased number of files.
 
 Note: This rule should be explicitly treated as 'hard and fast'. If you create a class that you expect to have 
 alternative implementations, but none of them are present at the time of pull request creation, interface still should 
-not be created. By the time somebody actually writes and tests it, it is quite likely to discover a different API was
+not be created. By the time somebody actually writes and tests it, he is quite likely to discover a different API was
 required to create a functional alternative.
 
 Historical Note: Creating interfaces for everything was in fact useful back in 2005, when Spring was configured in XMLs 
@@ -168,7 +191,7 @@ not all IDE's even had 'extract interface' automated refactoring.
 If you were practicing TDD at that time, it was safe to assume that at some point the need to manually create mock 
 implementation for almost every class. So it was pretty practical to create at least an interface to ensure that 
 someone who would want to merely mock your class in his test will not have to refactor all code that uses it 
-(including Spring configs). However the Java world has changed in a number of ways. 
+(including Spring configs). However the Java world has changed in a number of ways: 
 1. Reflection-based test support frameworks that eliminate the need for manual mocks, such as Mockito and later 
 Spock have established themselves. 
 2. We got powerful IDE's that allow to do standard refactorings automatically.
