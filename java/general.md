@@ -199,3 +199,29 @@ Spock have established themselves.
 4. Last, but not the least, git has arrived and allows us to isolate such changes in a separate commit.
 The combination of these factors made extracting interface as simple and reliable action, that takes less than a minute
 in most cases. Compare this to extra time reviewer spends reading changes to extra interface class on review.
+
+
+#### Prefer LocalDate and Instant to store and handle dates and times, avoid java.util.Date and java.util.Calendar
+
+When you need to store the precise moment on the timeline when something has happened, prefer UTC (java.time.Instant).
+When date has no timezone by definition (such as 'date of issue' as it appears printed in passport), prefer
+java.time.LocalDate. 
+Avoid any situations in-between. If you need to expose times in different timezones, do the conversion immediately 
+before sending the data.
+
+Motto:
+The conceptual problem with other representations is that they either requre a timezone context to be explicitly present 
+to perform operations (to compare 2 timestamps without timezone, you need to know which timezone it is) or explicit 
+business rules (consider what happens when you need to convert "date with timezone" to a different timezone)
+
+Note: 
+The situation when external date input comes with timezone is often used as an argument to support storing timestamp 
+with timezone. However if timezone is required to be applied somewhere else than converting a specific timestamp, it 
+has, strictly speaking, a wider scope than timestamp and should be stored on different record to ensure normalization.
+Even if, for whatever reason, you choose to denormalize, ensuring you can switch to normalized representation in the 
+future is a must.
+
+Exceptions:
+Sometimes, timezone-aware reporting or similar functionality that operates on large volumes of data has to take 
+advantage of DB-specific timezone features. However, in such situations at least reading such values back to Java 
+should be avoided.
