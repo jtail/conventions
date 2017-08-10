@@ -31,23 +31,34 @@ Motto: if a method was placed in the class with the intent of overriding method 
 declaration from superclass is highly likely to trigger the need to change the override  
 
 
+#### Deprecation cycle for inherited methods
+
+When doing non-trivial change to the method that is used in vast inheritance hierarchy, apply the following deprecation 
+cycle: 
+
+1. Implement alternative flow in superclass in a way that allows to rewrite subclasses one by one. A great way to do so
+is to provide default implementation in superclass that will assume new flow is used. Put @Deprecated on method 
+declaration in superclass and place reference to the new implementation in Javadoc.
+2. Review subclasses overriding the method, updating them to use the new flow and replacing @Override with @Deprecated 
+(or remove the method implementation completely, if you provided a default).
+3. Once all subclasses are processed (e.g. have method either removed or deprecated), remove the method from superclass.
+4. Clean up the remaining deprecated implementations.
+
+If you are modifying library code and method in question is exposed to consumers, insert 'release library version' after
+each step. 
+
+Note: The same cycle applies to fields, with the addition of step 0: encapsulate all field access in methods.   
+
+
 #### @Override on deprecated methods indicates implementation is not safe to remove
 
 When the parent method is @Deprecated, you should not normally have to implement it at all. But things happen, so if you 
 are facing this need, a careful choice is required:
 - If after removing it from parent the implementation *is guaranteed* remain fully functional, do not put @Override.
-- If removing the method from parent there is possible impact on the functionality of subclass class, .
-
-Note: This implies the following deprecation cycle for inherited methods:
-
-1. Implement alternative flow in superclass in a way that allows to rewrite subclasses one by one. A great way to do so
-is to provide default implementation in superclass that will assume new flow is used. Put @Deprecated on method 
-declaration in superclass.
-2. Review subclasses overriding the method, updating them to use the new flow and replacing @Override with @Deprecated 
-(or remove the method implementation completely, if you provided a default).
-3. Once all subclasses are processed (e.g. have method either removed or deprecated), remove the method from superclass.
-4. Clean up the remaining deprecated implementations.
-  
+- If removing the method from parent has possible impact on the functionality of subclass class, keep @Override.
+It is also recommended to communicate the exact impact via comment.
+ 
+Note: This implies using *Deprecation cycle for inherited methods* described earlier in this document. 
 
 #### Avoid ignoring exceptions 
 

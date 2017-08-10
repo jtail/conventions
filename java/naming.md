@@ -6,19 +6,23 @@ developers to think *more*, at the right time.
 
 Names of all program elements should be:
 
-#### Names are contextual
+#### Contextual
 
 Do not duplicate information which is already available on context where another developer will be reading the name.
-Avoid using "hungarian" notation and similar practices to embed information about type or scope into the name. 
+Avoid using "hungarian" notation and similar practices to embed information about type or scope into the name.
+ 
+For fields and methods, context is class name. For variables and parameters, context is class name + method name. 
 
     public class Chicken {
         // AVOID - field and method name are defined in the context of class so the word "chicken" is aready on context
         private long chickenId;
         private long getChickenName() {...}
+        private static class ChickenType {...}
 
         // PREFER
         private long id;
         private long getName() {...}
+        private static class Type {...}
     }
 
 Motto: Just like any other kind of duplication, violating this rule causes maintainability issues. If you later decide
