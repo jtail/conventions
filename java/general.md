@@ -1,5 +1,13 @@
 ### General programming Practices 
 
+#### Avoid misleading code and comments
+
+Misleading code elements are one of the biggest time wasters in programming. It negatively affects all aspects of 
+readability and developers should go the distance to avoid it.
+
+Note: This is one of a few rules that should be applied retroactively: if the new or updated code in one file causes
+the content of another file to become misleading, at least a relevant TODO comment should be added. 
+
 #### @Deprecated elements must be documented to direct reader to current api
 
 Deprecated program elements must be documemented using `@deprecated` javadoc tag that explains what should be used 
@@ -48,6 +56,19 @@ If you are modifying library code and method in question is exposed to consumers
 each step. 
 
 Note: The same cycle applies to fields, with the addition of step 0: encapsulate all field access in methods.   
+
+
+#### Usage of TODO comments
+
+Use TODO style comments mark technical debt items or other originating issues that can't
+Examples:
+
+    // TODO Convert this function to use java.time instead of joda.time
+    // TODO Add test cases for different timezones
+    // TODO This return point looks unreachable, either add a test that covers it or remove the conditional. 
+    
+It is preferred to express the intent by starting a deprecation cycle, however there are cases, when such course of 
+action will cause explosive growth of changeset size.
 
 
 #### @Override on deprecated methods indicates implementation is not safe to remove
