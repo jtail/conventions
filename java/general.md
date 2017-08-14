@@ -81,6 +81,12 @@ It is also recommended to communicate the exact impact via comment.
  
 Note: This implies using *Deprecation cycle for inherited methods* described earlier in this document. 
 
+
+#### Use immutable variables,  when possible
+
+
+
+
 #### Avoid ignoring exceptions 
 
 It is very rarely correct to do nothing in response to a caught exception in production code.  (Typical responses are 
