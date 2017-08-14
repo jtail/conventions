@@ -71,6 +71,7 @@ All above mentioned aspects are equally important.
 
 [Naming](java/naming.md)
 
+[Performance Optimizations](java/performance.md)
 
 ## References
 
