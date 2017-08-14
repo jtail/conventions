@@ -1,20 +1,3 @@
-<!-- TODO Exceptions: recoverable and unrecoverable -->
-
-<!-- TODO Avoid useless abstractions -->
-
-<!-- TODO Use of interfaces only when required -->
-
-<!-- TODO Keep decisions separate from imperative logic -->
-
-<!-- TODO Use immutable objects when possible -->
-
-<!-- TODO Avoid premature optimization -->
-
-<!-- TODO Avoid public fields -->
-
-<!-- TODO Avoid misleading -->
-
-
 ### General programming Practices 
 
 #### @Override must be used on non-deprecated methods
