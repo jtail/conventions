@@ -292,3 +292,22 @@ When you just need concatenate a fixed number of strings, prefer plus (+) string
             
 Motto: Starting from Java 1.6, compiler automatically optimizes such concatenation into StringBuilder, so there is no
 practical benefit to do so, while extra characters spent on StringBuilder make it harder to read and maintain.
+
+
+#### Avoid using String.format()
+
+Prefer MessageFormat to produce formatted strings. 
+
+    // PREFER
+    String message1 = MessageFormat.format("[X = {0,number,0.#}]", x));
+
+    // AVOID
+    String message2 = String.format("[X = %.1f]", x); 
+
+Motto: When handling null values, String.format() will first resolve null value and then apply formatting anyway.
+When formatting numbers, especially floating point, the output counteruntuitive and hardly useful.
+For example, `String.format("[X = %.1f]", null)`  will produce `[X = n]` in Oracle JVM 1.8. In Java, nulls are something 
+inevitably encountererd in places where you don't expect, so this issue alone makes String.format() a poor choice of 
+general purpose formatting solution.
+    
+Note: For truly performace sensitive scenarios, fall back to low-level string manipulation.
