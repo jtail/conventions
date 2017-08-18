@@ -263,3 +263,32 @@ Exceptions:
 Sometimes, timezone-aware reporting or similar functionality that operates on large volumes of data has to take 
 advantage of DB-specific timezone features. However, in such situations at least reading such values back to Java 
 should be avoided.
+
+
+#### Avoid using StringBuilder to append fixed number of strings
+
+When you just need concatenate a fixed number of strings, prefer plus (+) string concatenation operator.
+ 
+    // AVOID
+    String message = new StringBuilder("This ")
+            .append(flag ? "is" : "is not")
+            .append(" a long and complex message about ")
+            .append(topic)
+            .append(". Which is difficult to get right because of ")
+            .append(reason)
+            .append(".")
+            .toString();
+ 
+    // PREFER
+    String message = "This " + (flag ? "is" : "is not") + " a long and complex message about " +
+            topic + ". Which is difficult to get right because of " + reason + ".";
+
+    // VALID - items added in the loop
+    StringBuilder sb = new StringBuilder("Items in stock:");
+    for (String item: items) {
+        sb.append(" ").append(item);
+    }
+    return sb.toString();
+            
+Motto: Starting from Java 1.6, compiler automatically optimizes such concatenation into StringBuilder, so there is no
+practical benefit to do so, while extra characters spent on StringBuilder make it harder to read and maintain.
