@@ -11,7 +11,8 @@ Names of all program elements should be:
 Do not duplicate information which is already available on context where another developer will be reading the name.
 Avoid using "hungarian" notation and similar practices to embed information about type or scope into the name.
  
-For fields and methods, context is class name. For variables and parameters, context is class name + method name. 
+For class members, such as fields, methods and inner classes, context is class name. 
+For variables and parameters, context is class name + method name. 
 
     public class Chicken {
         // AVOID - field and method name are defined in the context of class so the word "chicken" is aready on context
@@ -348,30 +349,30 @@ However do not be easily caught into the trap of missing the important informati
 
 *Terminology note*
 
-**Imperative** method has observable side-effects (such as mutation of mutable objects or output to devices).
-Examples: PrintStream.println(), List.add(), StringBuilder.append(). 
+**Imperative** method has observable side-effects (such as mutation of mutable objects or output to devices) and is 
+intended to be called to achieve those. Examples: PrintStream.println(), List.add(), StringBuilder.append(). 
 
-**Pure** method has no observable side-effects and always produces the same return value given the same argument 
-values (for instance methods? object on which method is called, counts as one of arguments). The result value cannot 
-depend on any hidden information or state that may change while program execution proceeds or between different 
-executions of the program, nor can it depend on any external input from I/O devices. 
+**Pure method has no observable side-effects and always returns the logically same value given the same arguments. 
+The result value cannot depend on any hidden information or state that may change while program execution proceeds or 
+between different executions of the program, nor can it depend on any external input from I/O devices. 
 Examples: Math.max(), String.length().
 
-There are methods, belong to neither of these categories. For example, a simple getter that returns a mutable field or 
-a method that finds user in DB by name.  
+**Dirty** methods, belong to neither of these categories. Examples include methods that are invoked to external state 
+(`UserRepository.byId(String userId)`) or achieve some state (`UserService.ensureBlocked(String userId)`)
+
 
 #### Method names use lower camelCase and contain only alphanumeric characters.
 
-Also, avoid using underscore (_) and other non-alphanumeric characters in production code. 
+Avoid using underscore (_) and other non-alphanumeric characters in production code. 
 
 Note: In tests underscore can occassionally be useful to clearly separate name of method under test and test case name, 
 for example: `createUser_InvalidName`. And this is one extra reason why you should not use it in production code.
 
 
-#### Prefer names starting with verb in present simple for imperative methods 
+#### Imperative method names start with verb
 
-The verb can be followed by one or more words that give further details on the action being performed by the method. 
-Ensure that from the name it is clear waht exactly are side-effects of executing the method.            
+Names of imperative methods should start with verb in infinitive form, optionally followed by one or more words that 
+give further details on the effects of the method.            
 
     public interface UserService {
         User create(String name, String password);
@@ -380,38 +381,95 @@ Ensure that from the name it is clear waht exactly are side-effects of executing
 
 Motto: Explicitly communicate to the reader that method has side-effects and what exactly they are.
  
-There are no explicit limitations on naming non-imperative methods. They can start from the verb, a noun or even a 
+
+#### Avoid starting pure method names should with verb in infinitive
+
+Motto: Allow reader to distunguish that method is called for its value and not for side 
+Since pure methods have no side effects, the whose essense of them is defined by specifics of the returned object  
+
+There are no explicit limitations on naming 'dirty' methods. They can start from the verb, a noun or even a 
 preposition. All of the following examples are legal: 
 
     class EmailService { List<Email> findUnconfirmed() ... }
-    class User { Role getRole() ... }
     class Files { Stream<String> lines() ... } 
-    class AddressServiceTest { Address address(String line1, String line2, String city, String country) ... } 
-     
+    class AddressServiceTest { Address address(String line1, String line2, String city, String country) ... }   
+
+#### Recommendations on method naming
+
+If the noun name of what is being returned is not on context, include it in the method name:
+
+Use singular form when method returns one item: `java.nio.file.Files.lines()`. Those are typically helper methods 
+that build an instance based on arguments, or same as class it builds with the first letter lowercased. Prefer names 
+that start with adjective or gerund communicating the specifics. However, there will be times, when no such information
+exists - especially in test code when what you need is just some object in context of the test.
+
+    // PREFER
+    private static Address homeAddress(String line1, String line2, String city, String country) {
+        Address a = new Address();
+        a.setType = Address.Type.HOME; 
+        // populate fields from arguments ...
+        return a;
+    }
+
+    // ACCEPTABLE
+    private static Address Address(String line1, String line2, String city, String country) {
+        Address a = new Address();
+        // populate fields from arguments ...
+        return a;
+    }
+
+Use plural form when method returns multiple items. For getter-style methods returning stream, avoid using 'get' 
+prefixes (Stream is mutable object created per call, such method is idiomatically not a getter!).
+
+    public class User {
+        ...
+        Stream<Phone> phones() {...}
+        List<Phone> getActivePhones() {...}
+    }
 
 
-#### For methods, context is class name and parameter types. 
+#### Avoid duplicating information from class name and parameter types in the method name
 
-Therefore they generally should not be duplicated in the method name.
+Motto: Even with the compiled code, parameter types are available to the developer and therefore, are part of the name 
+context. Duplicating information from them can cause all the issues mentioned in the "Naming of program elements / 
+Contextual" section of this paper.  
+
 Keep in mind that does not apply to parameter names, that are not part of the method signature.
-Information available from method return value type usually should not be duplicated in method name, except for cases 
-when multiple methods would end up with a signature conflict otherwise.
-
-Motto: Even with the compiled code, parameter types are available to the developer.
 
 Examples:
 
     public interface TokenService {
-        // Avoid:
+        // AVOID
         public Batch<Token> getUpdatedTokensBatchBetweenFromAndToDates(Date from, Date to)
-        // Prefer:
+        
+        // PREFER
         public Batch<Token> findUpdatedBetween(Date from, Date to);
         public Batch<Token> findUpdatedBefore(Date date);
         public Batch<Token> findUpdatedAfter(Date date);
-        //
-        Set<Token> getAll();  
     }
 
+Information available from method return value type usually should not be duplicated in method name, except for cases 
+when multiple methods would end up with a signature conflict otherwise. Arrival of Stream API in JDK8 made this part 
+even more messy - the need to return both list and set is relatively rare, however the need to access the same 
+collection both as Stream and as List is somewhat more common. The raw number of such cases is still as low as 1-2%, 
+unfortunately those are typically core classes, heavily used throughout the application.
+Because of such disposition, establishing a generic rule to follow when naming all methods that return collections is an
+overkill, however a conventional way to handle the disambiguation still needs to be defined.
+The recommended approach is to use unprefixed names for methods that return stream (JDK8 has established this sort of 
+naming convention with the methods like `java.nio.file.Files.lines()`) and use naming without any disambiguation, until 
+necessary. alternative methods appear. 
+
+    public interface User {
+        Stream<Token> phones();
+        List<Token> getPhones();
+        Set<Token> getPhonesSet();  
+    }
+
+    public interface TokenService {
+        Stream<Token> active();
+        List<Token> getActiveList();
+        Set<Token> getActiveSet();  
+    }
 
 #### Examples of typical method name prefixes
 
@@ -438,7 +496,7 @@ Examples:
 
 Note that return type is on context so it should not be duplicated in method name.
 
-**is** - Simple boolean getter or predicate method.     
+**is** - Simple boolean getter (no-args) or predicate method.     
 
     public class User {
         boolean isSmart() {...}
@@ -482,15 +540,3 @@ Note: another common prefix for this kind of conversion is `parse`. Hovewer usin
 misleading, as not every conversion involves parsing. It is not recommended to use it, unless you explicitly want to
 communicate that parsing is involved.
 
-#### Examples of noun-bases method names 
-
-**noun in plural** - Method that returns Stream. Example: `java.nio.file.Files.lines()`. 
-
-**noun in singular** Helper method that builds an instance based on arguments can be named with a noun, or same as class 
-it builds with the first letter lowercased. This practice is often utilized in test code. Example:
- 
-    static Address address(String line1, String line2, String city, String country) {
-        Address a = new Address();
-        // populate fields from arguments ...
-        return a;
-    }
