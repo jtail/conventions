@@ -74,3 +74,12 @@ mistakes.
 the reader has to iterate over all possible combinations       
 3. Reusing variable often indicates a failure to name new values properly.
 4. When rearranging lines during refactoring it is easy to alter the result of method execution without noticing it.
+
+#### Avoid explicitly declaring variables and method parameters final
+
+Motto: If you are consistently practicing "Prefer effectively final local variables" section listed above, then all of 
+your variables will be effectively final and can be declared as such. Therefore, to be consistent you have 2 options:
+declare all variables final or completely avoid doing so. Second option is more concise while choosing the first one 
+brings no benefits as discovering a mutable variable 'rings the bell' that something is wrong already. Static analysis 
+tools can be configured to catch such situations at compile time. Note that JDK 8+ compiler identifies effectively final
+variables and treats them as such, so there will be no difference in compiled code.
