@@ -63,6 +63,8 @@ in a method.
         gem -> calcDamage(damageBase, gem)
     ).orElse(damageBase); 
 
+An obvious exception to this rule is variable modified in the loop. 
+
 Motto:
 
 1. Automated refactoring to extract a method does not result in nice method signatures if variable is changed inside the 
@@ -71,4 +73,4 @@ mistakes.
 2. It is difficult to follow the logic of the program when multiple variables have their value conditionally changed as 
 the reader has to iterate over all possible combinations       
 3. Reusing variable often indicates a failure to name new values properly.
-4. When rearranging lines of code during refactoring it is easy to alter the result of method execution without noticing   
+4. When rearranging lines during refactoring it is easy to alter the result of method execution without noticing it.
